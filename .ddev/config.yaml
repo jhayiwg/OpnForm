@@ -1,0 +1,5 @@
+name: opnform
+type: laravel
+docroot: "api/public"
+php_version: "8.2"
+webserver_type: nginx-fpm

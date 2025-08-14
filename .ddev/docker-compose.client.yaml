@@ -1,0 +1,12 @@
+version: '3.6'
+services:
+  client:
+    container_name: ddev-opnform-client
+    image: jhumanj/opnform-client:dev
+    # This service will be routed to by traefik
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.client.rule=Host(`opnform.ddev.site`)"
+      - "traefik.http.services.client.loadbalancer.server.port=3000"
