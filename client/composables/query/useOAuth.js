@@ -20,6 +20,13 @@ export function useOAuth() {
         auth_type: 'redirect'
       },
       {
+        name: 'microsoft',
+        title: 'Microsoft',
+        icon: 'mdi:microsoft',
+        enabled: useFeatureFlag('services.microsoft.auth', false),
+        auth_type: 'redirect'
+      },
+      {
         name: 'stripe',
         title: 'Stripe',
         icon: 'cib:stripe',

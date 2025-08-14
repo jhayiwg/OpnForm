@@ -276,7 +276,7 @@ Route::group(['middleware' => 'auth.multi'], function () {
 });
 
 Route::group(['middleware' => 'guest:api'], function () {
-    Route::post('login', [LoginController::class, 'login'])->name('login');
+    Route::post('login', [LoginController::class, 'login'])->name('login')->middleware('form.login.enabled');
     Route::post('register', [RegisterController::class, 'register']);
 
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);

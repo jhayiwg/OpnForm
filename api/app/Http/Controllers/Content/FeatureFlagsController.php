@@ -13,6 +13,7 @@ class FeatureFlagsController extends Controller
             return [
                 'self_hosted' => config('app.self_hosted', true),
                 'setup_required' => config('app.self_hosted', true) && !\App\Models\User::max('id'),
+                'disable_form_login' => config('opnform.disable_form_login', false),
                 'custom_domains' => config('custom-domains.enabled', false),
                 'ai_features' => !empty(config('services.openai.api_key')),
                 'version' => $this->getAppVersion(),
@@ -35,7 +36,10 @@ class FeatureFlagsController extends Controller
                     ],
                     'telegram' => [
                         'bot_id' => $this->extractTelegramBotId()
-                    ]
+                    ],
+                    'microsoft' => [
+                        'auth' => !empty(config('services.microsoft.client_id')) && !empty(config('services.microsoft.client_secret')),
+                    ],
                 ],
                 'integrations' => [
                     'zapier' => config('services.zapier.enabled'),

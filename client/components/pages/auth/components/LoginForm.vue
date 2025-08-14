@@ -6,6 +6,7 @@
     />
 
     <form
+      v-if="!useFeatureFlag('disable_form_login')"
       method="POST"
       class="mt-4"
       @submit.prevent="login"
@@ -73,6 +74,20 @@
         @click.prevent="signInwithGoogle"
         icon="devicon:google"
         label="Sign in with Google"
+      />
+      <UButton
+        v-if="useFeatureFlag('services.microsoft.auth')"
+        native-type="button"
+        color="neutral"
+        variant="outline"
+        size="lg"
+        class="space-x-4 mt-4 flex items-center"
+        block
+        :disabled="form.busy"
+        :loading="false"
+        @click.prevent="signInWithMicrosoft"
+        icon="devicon:microsoft"
+        label="Sign in with Microsoft"
       />
       <p
         v-if="!useFeatureFlag('self_hosted')"
@@ -186,6 +201,14 @@ const showOAuthError = (error) => {
 const signInwithGoogle = () => {
   try {
     oAuth.guestConnect('google', true)
+  } catch (error) {
+    showOAuthError(error)
+  }
+}
+
+const signInWithMicrosoft = () => {
+  try {
+    oAuth.guestConnect('microsoft', true)
   } catch (error) {
     showOAuthError(error)
   }

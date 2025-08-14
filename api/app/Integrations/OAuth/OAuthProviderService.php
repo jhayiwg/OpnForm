@@ -8,12 +8,15 @@ use App\Integrations\OAuth\Drivers\OAuthGoogleOneTapDriver;
 use App\Integrations\OAuth\Drivers\OAuthStripeDriver;
 use App\Integrations\OAuth\Drivers\OAuthTelegramDriver;
 
+use App\Integrations\OAuth\Drivers\OAuthMicrosoftDriver;
+
 enum OAuthProviderService: string
 {
     case Google = 'google';
     case GoogleOneTap = 'google_one_tap';
     case Stripe = 'stripe';
     case Telegram = 'telegram';
+    case Microsoft = 'microsoft';
 
     public function getDriver(): OAuthDriver
     {
@@ -22,6 +25,7 @@ enum OAuthProviderService: string
             self::GoogleOneTap => new OAuthGoogleOneTapDriver(),
             self::Stripe =>  new OAuthStripeDriver(),
             self::Telegram => new OAuthTelegramDriver(),
+            self::Microsoft => new OAuthMicrosoftDriver(),
         };
     }
 
@@ -32,6 +36,7 @@ enum OAuthProviderService: string
             self::GoogleOneTap => $intent === 'auth',
             self::Stripe => $intent === 'integration',
             self::Telegram => $intent === 'integration',
+            self::Microsoft => $intent === 'auth',
         };
     }
 
