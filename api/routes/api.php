@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\Forms\FormController;
 use App\Http\Controllers\Forms\FormStatsController;
 use App\Http\Controllers\Forms\FormSubmissionController;
+use App\Http\Controllers\Forms\FormShareController;
 use App\Http\Controllers\Forms\Integration\FormIntegrationsController;
 use App\Http\Controllers\Forms\Integration\FormIntegrationsEventController;
 use App\Http\Controllers\Forms\Integration\FormZapierWebhookController;
@@ -49,6 +50,7 @@ if (config('app.self_hosted')) {
 Route::group(['middleware' => 'auth.multi'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
+    Route::get('/users/find-by-email', [UserController::class, 'findByEmail'])->name('users.find-by-email');
 
     Route::get('user', [UserController::class, 'current'])->name('user.current');
     Route::delete('user', [UserController::class, 'deleteAccount']);
@@ -175,6 +177,12 @@ Route::group(['middleware' => 'auth.multi'], function () {
                 [FormController::class, 'duplicate']
             )->name('duplicate');
 
+            // Sharing
+            Route::get('/{form}/share', [FormShareController::class, 'index'])->name('share.index');
+            Route::post('/{form}/share', [FormShareController::class, 'share'])->name('share');
+            Route::put('/{form}/share/{user}', [FormShareController::class, 'update'])->name('share.update');
+            Route::delete('/{form}/share/{user}', [FormShareController::class, 'destroy'])->name('share.destroy');
+
             // Assets & uploaded files
             Route::post(
                 '/assets/upload',
@@ -277,7 +285,7 @@ Route::group(['middleware' => 'auth.multi'], function () {
 
 Route::group(['middleware' => 'guest:api'], function () {
     Route::post('login', [LoginController::class, 'login'])->name('login')->middleware('form.login.enabled');
-    Route::post('register', [RegisterController::class, 'register']);
+    Route::post('register', [RegisterController::class, 'register'])->middleware('registration.enabled');
 
     Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail']);
     Route::post('password/reset', [ResetPasswordController::class, 'reset']);

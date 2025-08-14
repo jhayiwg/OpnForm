@@ -90,7 +90,7 @@
         label="Sign in with Microsoft"
       />
       <p
-        v-if="!useFeatureFlag('self_hosted')"
+        v-if="!useFeatureFlag('self_hosted') && !useFeatureFlag('disable_registration')"
         class="text-neutral-500 text-sm text-center mt-4"
       >
         Don't have an account?

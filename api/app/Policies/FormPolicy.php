@@ -36,11 +36,17 @@ class FormPolicy
         // Check if authenticated via Sanctum token
         if ($token = $user->currentAccessToken()) {
             $canAccess = $token->can('forms-read') || $token->can('manage-integrations');
-            return $canAccess && $user->ownsForm($form);
+            if ($canAccess && $user->ownsForm($form)) {
+                return true;
+            }
         }
 
         // Fallback to JWT / session logic
-        return $user->ownsForm($form);
+        if ($user->ownsForm($form)) {
+            return true;
+        }
+
+        return $user->sharedForms()->where('form_id', $form->id)->exists();
     }
 
     /**
@@ -68,10 +74,19 @@ class FormPolicy
 
         // If using Sanctum token, ensure the token has write ability
         if ($token = $user->currentAccessToken()) {
-            return $token->can('forms-write') && $ownsAndWritable;
+            if ($token->can('forms-write') && $ownsAndWritable) {
+                return true;
+            }
         }
 
-        return $ownsAndWritable;
+        if ($ownsAndWritable) {
+            return true;
+        }
+
+        return $user->sharedForms()
+            ->where('form_id', $form->id)
+            ->where('permission', 'edit')
+            ->exists();
     }
 
     /**
@@ -91,7 +106,7 @@ class FormPolicy
      */
     public function delete(User $user, Form $form)
     {
-        return $this->canPerformWriteOperation($user, $form);
+        return $form->workspace->isAdminUser($user);
     }
 
     /**

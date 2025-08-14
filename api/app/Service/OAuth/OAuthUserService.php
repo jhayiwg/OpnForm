@@ -38,9 +38,9 @@ class OAuthUserService
         }
 
         // No existing user - create new account
-        // Check if registration is allowed in self-hosted mode
-        if (config('app.self_hosted') && app()->environment() !== 'testing') {
-            abort(422, 'User registration is not allowed.');
+        // Check if registration is allowed
+        if (config('opnform.disable_registration')) {
+            abort(403, 'Registration is disabled.');
         }
 
         // Get UTM data from context

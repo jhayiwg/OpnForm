@@ -311,6 +311,11 @@ class Form extends Model implements CachableAttributes
         return $this->hasMany(FormIntegration::class);
     }
 
+    public function sharedWithUsers()
+    {
+        return $this->belongsToMany(User::class, 'form_user')->withPivot('permission')->withTimestamps();
+    }
+
     /**
      * Config/options
      */

@@ -107,6 +107,16 @@
                       Edit <span class="hidden md:inline">form</span>
                     </UButton>
                   </TrackClick>
+                  <UButton
+                    v-if="!workspace?.is_readonly"
+                    color="neutral"
+                    variant="outline"
+                    icon="i-heroicons-share"
+                    class="hover:no-underline"
+                    @click="openShareModal"
+                  >
+                    Share
+                  </UButton>
                   <extra-menu
                     v-if="!workspace?.is_readonly"
                     :form="form"
@@ -171,6 +181,8 @@
         <div id="form-show-portals" class="z-20" />
       </div>
     </main>
+
+    <FormShareModal :show="showShareModal" @close="showShareModal = false" :form="form" />
   </div>
 </template>
 
@@ -182,6 +194,7 @@ import ExtraMenu from "../../../components/pages/forms/show/ExtraMenu.vue"
 import FormCleanings from "../../../components/pages/forms/show/FormCleanings.vue"
 import FormStatusBadges from "../../../components/open/forms/components/FormStatusBadges.vue"
 import TrackClick from "../../../components/global/TrackClick.vue"
+import FormShareModal from "../../../components/pages/forms/show/FormShareModal.vue"
 
 definePageMeta({
   layout: "empty",
@@ -227,5 +240,11 @@ const showDraftFormWarningNotification = () => {
   useAlert().warning(
     "This form is currently in Draft mode and is not publicly accessible, You can change the form status on the edit form page.",
   )
+}
+
+const showShareModal = ref(false)
+
+const openShareModal = () => {
+  showShareModal.value = true
 }
 </script>

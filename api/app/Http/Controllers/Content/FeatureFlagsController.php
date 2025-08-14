@@ -14,6 +14,7 @@ class FeatureFlagsController extends Controller
                 'self_hosted' => config('app.self_hosted', true),
                 'setup_required' => config('app.self_hosted', true) && !\App\Models\User::max('id'),
                 'disable_form_login' => config('opnform.disable_form_login', false),
+                'disable_registration' => config('opnform.disable_registration', false),
                 'custom_domains' => config('custom-domains.enabled', false),
                 'ai_features' => !empty(config('services.openai.api_key')),
                 'version' => $this->getAppVersion(),

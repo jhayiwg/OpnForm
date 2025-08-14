@@ -7,5 +7,6 @@ return [
     'extra_pro_users_emails' => explode(',', env('EXTRA_PRO_USERS_EMAILS') ?? ''),
     'show_official_templates' => env('SHOW_OFFICIAL_TEMPLATES', true),
     'disable_form_login' => env('DISABLE_FORM_LOGIN', false),
+    'disable_registration' => env('DISABLE_REGISTRATION', false),
     'condition_mapping' => json_decode(file_get_contents(resource_path('data/open_filters.json')), true),
 ];

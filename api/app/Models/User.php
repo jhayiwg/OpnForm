@@ -230,6 +230,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsToMany(Workspace::class);
     }
 
+    public function sharedForms()
+    {
+        return $this->belongsToMany(Form::class, 'form_user')->withPivot('permission')->withTimestamps();
+    }
+
     public function forms()
     {
         return $this->hasMany(Form::class, 'creator_id');
